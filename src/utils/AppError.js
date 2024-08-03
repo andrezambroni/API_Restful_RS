@@ -1,10 +1,8 @@
 class AppError {
-  message
-  statusCode
-
+  // Construtor da classe AppError
   constructor(message, statusCode = 400) {
-    this.message = message
-    this.statusCode = statusCode
+    this.message = message // Mensagem de erro
+    this.statusCode = statusCode // Código de status HTTP
   }
 }
 

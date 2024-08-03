@@ -1,15 +1,16 @@
-const { Router } = require('express')
+const { Router } = require("express");
+const NotesController = require("../controllers/NotesController");
 
-const NotesController = require('../controllers/NotesController')
+const notesRoutes = Router();
+const notesController = new NotesController();
 
-const notesRoutes = Router()
+// Rota para listar notas
+notesRoutes.get("/", notesController.index);
+// Rota para criar uma nova nota
+notesRoutes.post("/", notesController.create);
+// Rota para exibir uma nota específica
+notesRoutes.get("/:id", notesController.show);
+// Rota para deletar uma nota
+notesRoutes.delete("/:id", notesController.delete);
 
-const notesController = new NotesController()
-
-notesRoutes.get('/', notesController.index)
-notesRoutes.post('/:user_id', notesController.create)
-notesRoutes.get('/:id', notesController.show)
-notesRoutes.delete('/:id', notesController.delete)
-
-
-module.exports = notesRoutes
+module.exports = notesRoutes;

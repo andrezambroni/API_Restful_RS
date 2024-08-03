@@ -1,32 +1,25 @@
-require('express-async-errors')
-const migrationsRun = require('./database/sqlite/migrations')
-const AppError = require('./utils/AppError')
-
+require('dotenv/config') // Carrega variáveis de ambiente do arquivo .env
 const express = require('express')
 const routes = require('./routes')
-
-migrationsRun()
+const AppError = require('./utils/AppError')
+const handleErrors = require('./utils/handleErrors')
+const sqliteConnection = require('./database/sqlite')
 
 const app = express()
-app.use(express.json())
 
-app.use(routes)
+app.use(express.json()) // Middleware para parsear JSON
 
-app.use((error, request, response, next) => {
-  if (error instanceof AppError) {
-    return response.status(error.statusCode).json({
-      status: 'error',
-      message: error.message
-    })
-  }
+sqliteConnection() // Conecta ao banco de dados SQLite
 
-  console.error(error)
+app.use(routes) // Usa as rotas definidas no arquivo routes
 
-  return response.status(500).json({
-    status: 'error',
-    message: 'Internal server error'
-  })
+// Middleware para lidar com erros
+app.use((err, req, res, next) => {
+  handleErrors(err, req, res, next)
 })
 
-const PORT = 3333
-app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`))
+// Define a porta do servidor
+const PORT = process.env.PORT || 3333
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
+})

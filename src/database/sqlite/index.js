@@ -1,14 +1,15 @@
-const sqlite3 = require('sqlite3')
-const sqlite = require('sqlite')
-const path = require('path')
+const sqlite3 = require("sqlite3");
+const { open } = require("sqlite");
+const path = require("path");
 
-async function sqliteConnection(){
-  const database = await sqlite.open({
-    filename: path.resolve(__dirname, "..", "database.db"),
-    driver: sqlite3.Database
-  })
+async function sqliteConnection() {
+  // Abre uma conexão com o banco de dados SQLite
+  const db = await open({
+    filename: path.resolve(__dirname, "database.db"), // Caminho para o arquivo do banco de dados
+    driver: sqlite3.Database, // Driver do SQLite
+  });
 
-  return database
-} 
+  return db;
+}
 
-module.exports = sqliteConnection
+module.exports = sqliteConnection;
